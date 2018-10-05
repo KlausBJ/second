@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  interface_target: one
+  interface_target_type: Interface target
+
+two:
+  name: MyString
+  interface_target: two
+  interface_target_type: Interface target

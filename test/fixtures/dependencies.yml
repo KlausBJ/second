@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  comment: MyString
+  depender: one
+  depender_type: Depender
+  deploy_sequence: one
+  deploy_trigger: one
+
+two:
+  name: MyString
+  comment: MyString
+  depender: two
+  depender_type: Depender
+  deploy_sequence: two
+  deploy_trigger: two

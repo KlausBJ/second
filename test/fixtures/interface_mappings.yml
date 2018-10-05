@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  interface: one
+  entity_version: one
+  entity_version_type: Entity version
+
+two:
+  interface: two
+  entity_version: two
+  entity_version_type: Entity version

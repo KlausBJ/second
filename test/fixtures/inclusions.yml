@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ru_version: one
+  inclusion_entity: one
+  inclusion_entity_type: Inclusion entity
+
+two:
+  ru_version: two
+  inclusion_entity: two
+  inclusion_entity_type: Inclusion entity

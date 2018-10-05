@@ -1,0 +1,35 @@
+To-do:
+Make as many relations as possible bi-directional (if it makes sense - some will be irrelevant...)
+
+Test all relations - what needs to be auto created from relation owner...
+
+amoeba cloning, where is it relevant?
+	candicates for conversion to stored procedure?
+
+Refactoring (DRY) (models)
+	what code can be shared between models?
+		versioning
+
+Test destroy functionality
+		
+Controllers for some models; AppVersion, DbVersion, EnvVersion, Credential(Version?... !), Dependency, DeployPlan(?)
+
+No controllers: Db, App, Env, FileObject/Package/Script/Template, 
+
+Heavy tasks converted to use stored procedures for better performance
+	calculation of deployplan
+	resolution of dependencies
+	get list of apps, dbs, environments + their versions
+	find potential dependency candidates - limit search to env_version, so it does not become too complex
+
+Symbol-translation needs perfecting
+	wanted format + implementation of that format
+	
+Consider adding more indexes...
+	
+Check schema.rb agains model definitions
+
+web "service" for downloading tailored files (entire package as zip, or page with links to everything?)
+	(/env?)/:env_slug/:env_ver_slug/:entity_slug/:file_slug <- single file (if above is page with links, then maybe no need for this)
+	(/env?)/:env_slug/:env_ver_slug/:entity_slug <- entire package
+	
