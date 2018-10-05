@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181004114551) do
+ActiveRecord::Schema.define(version: 20181005100925) do
 
   create_table "app_instances", force: :cascade do |t|
     t.bigint "app_version_id"
@@ -63,7 +63,6 @@ ActiveRecord::Schema.define(version: 20181004114551) do
   end
 
   create_table "dependee_masks", force: :cascade do |t|
-    t.bigint "dependee_id"
     t.bigint "interface_id"
     t.boolean "interface_not"
     t.string "version_regex"
@@ -71,17 +70,10 @@ ActiveRecord::Schema.define(version: 20181004114551) do
     t.bigint "dependee_entity_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dependee_entity_type", "dependee_entity_id"], name: "dependee_mask_dependee_entity__type_and_id"
-    t.index ["dependee_id"], name: "index_dependee_masks_on_dependee_id"
-    t.index ["interface_id"], name: "index_dependee_masks_on_interface_id"
-  end
-
-  create_table "dependees", force: :cascade do |t|
     t.bigint "dependency_id"
-    t.string "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["dependency_id"], name: "index_dependees_on_dependency_id"
+    t.index ["dependee_entity_type", "dependee_entity_id"], name: "dependee_mask_dependee_entity__type_and_id"
+    t.index ["dependency_id"], name: "index_dependee_masks_on_dependency_id"
+    t.index ["interface_id"], name: "index_dependee_masks_on_interface_id"
   end
 
   create_table "dependencies", force: :cascade do |t|
@@ -275,9 +267,8 @@ ActiveRecord::Schema.define(version: 20181004114551) do
   add_foreign_key "db_instances", "env_versions"
   add_foreign_key "db_instances", "ru_instances"
   add_foreign_key "db_versions", "dbs"
-  add_foreign_key "dependee_masks", "dependees"
+  add_foreign_key "dependee_masks", "dependencies"
   add_foreign_key "dependee_masks", "interfaces"
-  add_foreign_key "dependees", "dependencies"
   add_foreign_key "dependencies", "deploy_sequences"
   add_foreign_key "dependencies", "deploy_triggers"
   add_foreign_key "deploy_plan_items", "deploy_plans"
