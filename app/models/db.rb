@@ -1,7 +1,7 @@
 class Db < ApplicationRecord
 	has_many :db_versions, dependent: :destroy
 	has_many :interfaces, as: :entity, dependent: :destroy
-	has_many dependee_masks, as: :dependee_entity, dependent: :destroy
+	has_many :dependee_masks, as: :dependee_entity, dependent: :destroy
 	
 	after_create :init_db_versions
 		
