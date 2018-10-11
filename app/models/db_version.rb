@@ -24,7 +24,7 @@ class DbVersion < ApplicationRecord
 	end
 	
 	def next #new_ver?
-		return DbVersion.create(app_id: self.db_id, version: self.version.succ)
+		return DbVersion.create(db_id: self.db_id, version: self.version.succ)
 	end
 	
 	def parent

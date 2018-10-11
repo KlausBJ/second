@@ -17,4 +17,9 @@ class EnvVersion < ApplicationRecord
 		include_association :deploy_plans # hmm, maybe... 
 		include_association :ru_instances
 	end
+	
+	def next #new_ver?
+		return EnvVersion.create(environment_id: self.environment_id, version: self.version.succ)
+	end
+
 end
