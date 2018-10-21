@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  dependee: one
+  dependency: one
   interface: one
   interface_not: false
   version_regex: MyString
@@ -9,7 +9,7 @@ one:
   dependee_entity_type: Dependee entity
 
 two:
-  dependee: two
+  dependency: two
   interface: two
   interface_not: false
   version_regex: MyString

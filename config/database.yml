@@ -13,7 +13,8 @@ default: &default
   encoding: utf8
   username: deployfac
   password: D3pl0yf4c
-  host: PEMML13VM51.pensam.dk
+  host: DESKTOP-FGVA9HB
+  port: 1433
 
 development:
   <<: *default

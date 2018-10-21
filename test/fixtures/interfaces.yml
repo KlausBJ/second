@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  interface_target: one
-  interface_target_type: Interface target
+  entity: one
+  entity_type: Entity
 
 two:
   name: MyString
-  interface_target: two
-  interface_target_type: Interface target
+  entity: two
+  entity_type: Entity

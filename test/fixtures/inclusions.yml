@@ -2,10 +2,10 @@
 
 one:
   ru_version: one
-  inclusion_entity: one
-  inclusion_entity_type: Inclusion entity
+  entity_version: one
+  entity_version_type: Entity version
 
 two:
   ru_version: two
-  inclusion_entity: two
-  inclusion_entity_type: Inclusion entity
+  entity_version: two
+  entity_version_type: Entity version

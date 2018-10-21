@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class AppTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "AppVersion should be created" do
+    app = App.create!(name: 'TestApp')
+	assert app.app_versions.any?
+  end
 end
