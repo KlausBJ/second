@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181005100925) do
+ActiveRecord::Schema.define(version: 20181010132707) do
 
   create_table "app_instances", force: :cascade do |t|
     t.bigint "app_version_id"
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(version: 20181005100925) do
     t.index ["deploy_trigger_id"], name: "index_dependencies_on_deploy_trigger_id"
   end
 
+  create_table "deploy_logs", force: :cascade do |t|
+    t.bigint "env_version_id"
+    t.text "content"
+    t.boolean "deployed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["env_version_id"], name: "index_deploy_logs_on_env_version_id"
+  end
+
   create_table "deploy_plan_items", force: :cascade do |t|
     t.bigint "deploy_plan_id"
     t.integer "order"
@@ -125,6 +134,16 @@ ActiveRecord::Schema.define(version: 20181005100925) do
     t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "entity_logs", force: :cascade do |t|
+    t.bigint "deploy_log_id"
+    t.string "entity_instance_type"
+    t.bigint "entity_instance_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deploy_log_id"], name: "index_entity_logs_on_deploy_log_id"
+    t.index ["entity_instance_type", "entity_instance_id"], name: "index_entity_logs_on_entity_instance_type_and_entity_instance_id"
   end
 
   create_table "env_versions", force: :cascade do |t|
@@ -271,8 +290,10 @@ ActiveRecord::Schema.define(version: 20181005100925) do
   add_foreign_key "dependee_masks", "interfaces"
   add_foreign_key "dependencies", "deploy_sequences"
   add_foreign_key "dependencies", "deploy_triggers"
+  add_foreign_key "deploy_logs", "env_versions"
   add_foreign_key "deploy_plan_items", "deploy_plans"
   add_foreign_key "deploy_plans", "env_versions"
+  add_foreign_key "entity_logs", "deploy_logs"
   add_foreign_key "env_versions", "environments"
   add_foreign_key "inclusions", "ru_versions"
   add_foreign_key "interface_mappings", "interfaces"
