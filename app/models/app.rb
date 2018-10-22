@@ -5,7 +5,7 @@ class App < ApplicationRecord
 
 	after_create :init_app_versions
 
-	def init_app_versions
+	def init_app_versions # test created and passed
 		if (AppVersion.where(app_id: self.id).empty?)
 			AppVersion.create(version: '1.0', app_id: self.id)
 		end

@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class DbTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "DbVersion should be created" do
+    db = Db.create!(name: 'TestDb')
+	assert db.db_versions.any?
+  end
 end

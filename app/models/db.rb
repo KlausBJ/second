@@ -5,7 +5,7 @@ class Db < ApplicationRecord
 	
 	after_create :init_db_versions
 		
-	def init_db_versions
+	def init_db_versions # test created and passed
 		if (DbVersion.where(db_id: self.id).empty?)
 			DbVersion.create(version: '1.0', db_id: self.id)
 		end
