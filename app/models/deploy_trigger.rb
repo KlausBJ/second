@@ -1,4 +1,4 @@
 class DeployTrigger < ApplicationRecord
-	has_many :dependencies
-	
+  has_many :dependencies
+  
 end
