@@ -1,3 +1,4 @@
+# migration
 class CreateDeployTriggers < ActiveRecord::Migration[5.1]
   def change
     create_table :deploy_triggers do |t|

@@ -1,3 +1,4 @@
+# migration
 class CreateEnvVersions < ActiveRecord::Migration[5.1]
   def change
     create_table :env_versions do |t|

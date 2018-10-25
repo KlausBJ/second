@@ -1,3 +1,4 @@
+# migration
 class CreateApps < ActiveRecord::Migration[5.1]
   def change
     create_table :apps do |t|

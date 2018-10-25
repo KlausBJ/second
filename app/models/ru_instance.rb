@@ -1,3 +1,4 @@
+# instances of RuVersion
 class RuInstance < ApplicationRecord
   belongs_to :ru_version, optional: true
   belongs_to :env_version
@@ -5,5 +6,4 @@ class RuInstance < ApplicationRecord
   has_many :db_instances, dependent: :destroy
 
   # intentionally no amoeba block here
-  
 end

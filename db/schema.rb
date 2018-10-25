@@ -1,17 +1,19 @@
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
-# incrementally modify your database, and then regenerate this schema definition.
+# incrementally modify your database, and then regenerate this schema
+# definition.
 #
 # Note that this schema.rb definition is the authoritative source for your
 # database schema. If you need to create the application database on another
 # system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# from scratch. The latter is a flawed and unsustainable approach (the more
+# migrations you'll amass, the slower it'll run and the greater likelihood for
+# issues).
 #
-# It's strongly recommended that you check this file into your version control system.
+# It's strongly recommended that you check this file into your version control
+# system.
 
 ActiveRecord::Schema.define(version: 20181010132707) do
-
   create_table 'app_instances', force: :cascade do |t|
     t.bigint 'app_version_id'
     t.bigint 'env_version_id'
@@ -71,7 +73,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.bigint 'dependency_id'
-    t.index ['dependee_entity_type', 'dependee_entity_id'], name: 'dependee_mask_dependee_entity__type_and_id'
+    t.index %w[dependee_entity_type dependee_entity_id], name:
+      'dependee_mask_dependee_entity__type_and_id'
     t.index ['dependency_id'], name: 'index_dependee_masks_on_dependency_id'
     t.index ['interface_id'], name: 'index_dependee_masks_on_interface_id'
   end
@@ -85,9 +88,12 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'deploy_trigger_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['depender_type', 'depender_id'], name: 'index_dependencies_on_depender_type_and_depender_id'
-    t.index ['deploy_sequence_id'], name: 'index_dependencies_on_deploy_sequence_id'
-    t.index ['deploy_trigger_id'], name: 'index_dependencies_on_deploy_trigger_id'
+    t.index %w[depender_type depender_id], name:
+      'index_dependencies_on_depender_type_and_depender_id'
+    t.index ['deploy_sequence_id'], name:
+      'index_dependencies_on_deploy_sequence_id'
+    t.index ['deploy_trigger_id'], name:
+      'index_dependencies_on_deploy_trigger_id'
   end
 
   create_table 'deploy_logs', force: :cascade do |t|
@@ -108,9 +114,12 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.datetime 'updated_at', null: false
     t.string 'entity_instance_type'
     t.bigint 'entity_instance_id'
-    t.index ['after_item_type', 'after_item_id'], name: 'index_deploy_plan_items_on_after_item_type_and_after_item_id'
-    t.index ['deploy_plan_id'], name: 'index_deploy_plan_items_on_deploy_plan_id'
-    t.index ['entity_instance_type', 'entity_instance_id'], name: 'index_deploy_plan_items_on_entity_instance_type_and_entity_instance_id'
+    t.index %w[after_item_type after_item_id], name:
+      'index_deploy_plan_items_on_after_item_type_and_after_item_id'
+    t.index ['deploy_plan_id'], name:
+      'index_deploy_plan_items_on_deploy_plan_id'
+    t.index %w[entity_instance_type entity_instance_id], name:
+      'index_deploy_plan_items_on_entity_instance_type_and_entity_instance_id'
   end
 
   create_table 'deploy_plans', force: :cascade do |t|
@@ -143,7 +152,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['deploy_log_id'], name: 'index_entity_logs_on_deploy_log_id'
-    t.index ['entity_instance_type', 'entity_instance_id'], name: 'index_entity_logs_on_entity_instance_type_and_entity_instance_id'
+    t.index %w[entity_instance_type entity_instance_id], name:
+      'index_entity_logs_on_entity_instance_type_and_entity_instance_id'
   end
 
   create_table 'env_versions', force: :cascade do |t|
@@ -179,7 +189,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.datetime 'updated_at', null: false
     t.string 'entity_version_type'
     t.bigint 'entity_version_id'
-    t.index ['entity_version_type', 'entity_version_id'], name: 'index_inclusions_on_entity_version_type_and_entity_version_id'
+    t.index %w[entity_version_type entity_version_id], name:
+      'index_inclusions_on_entity_version_type_and_entity_version_id'
     t.index ['ru_version_id'], name: 'index_inclusions_on_ru_version_id'
   end
 
@@ -189,7 +200,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'entity_version_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['entity_version_type', 'entity_version_id'], name: 'interface_mapping_entity_version__type_and_id'
+    t.index %w[entity_version_type entity_version_id], name:
+      'interface_mapping_entity_version__type_and_id'
     t.index ['interface_id'], name: 'index_interface_mappings_on_interface_id'
   end
 
@@ -199,7 +211,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.datetime 'updated_at', null: false
     t.string 'entity_type'
     t.bigint 'entity_id'
-    t.index ['entity_type', 'entity_id'], name: 'index_interfaces_on_entity_type_and_entity_id'
+    t.index %w[entity_type entity_id], name:
+      'index_interfaces_on_entity_type_and_entity_id'
   end
 
   create_table 'packages', force: :cascade do |t|
@@ -209,7 +222,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'entity_version_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['entity_version_type', 'entity_version_id'], name: 'index_packages_on_entity_version_type_and_entity_version_id'
+    t.index %w[entity_version_type entity_version_id], name:
+      'index_packages_on_entity_version_type_and_entity_version_id'
     t.index ['file_object_id'], name: 'index_packages_on_file_object_id'
   end
 
@@ -221,7 +235,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'owner_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['owner_type', 'owner_id'], name: 'index_properties_on_owner_type_and_owner_id'
+    t.index %w[owner_type owner_id], name:
+      'index_properties_on_owner_type_and_owner_id'
   end
 
   create_table 'release_units', force: :cascade do |t|
@@ -255,16 +270,18 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'entity_version_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['entity_version_type', 'entity_version_id'], name: 'index_scripts_on_entity_version_type_and_entity_version_id'
+    t.index %w[entity_version_type entity_version_id], name:
+      'index_scripts_on_entity_version_type_and_entity_version_id'
     t.index ['file_object_id'], name: 'index_scripts_on_file_object_id'
   end
 
-  create_table 'sysdiagrams', primary_key: 'diagram_id', id: :integer, force: :cascade do |t|
+  create_table 'sysdiagrams', primary_key: 'diagram_id', id: :integer, force:
+    :cascade do |t|
     t.string 'name', limit: 128, null: false
     t.integer 'principal_id', null: false
     t.integer 'version'
     t.binary 'definition'
-    t.index ['principal_id', 'name'], name: 'UK_principal_name', unique: true
+    t.index %w[principal_id name], name: 'UK_principal_name', unique: true
   end
 
   create_table 'templates', force: :cascade do |t|
@@ -274,7 +291,8 @@ ActiveRecord::Schema.define(version: 20181010132707) do
     t.bigint 'entity_version_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index ['entity_version_type', 'entity_version_id'], name: 'index_templates_on_entity_version_type_and_entity_version_id'
+    t.index %w[entity_version_type entity_version_id], name:
+      'index_templates_on_entity_version_type_and_entity_version_id'
     t.index ['file_object_id'], name: 'index_templates_on_file_object_id'
   end
 

@@ -11,6 +11,16 @@ Refactoring (DRY) (models)
 		versioning
 
 Test destroy functionality
+	do dependents realy get destroyed?
+	#App/Db (Delete All)
+	def destroyable?
+		return <app/db>_versions.ever_deployed.none? # define method (single query SP)
+	end
+	
+	#<App/Db>Version (Delete This)
+	def destroyable?
+		return <app/db>_instances.ever_deployed.none?
+	end
 		
 Controllers for some models; AppVersion, DbVersion, EnvVersion, Credential(Version?... !), Dependency, DeployPlan(?)
 
@@ -32,4 +42,7 @@ Check schema.rb agains model definitions
 web "service" for downloading tailored files (entire package as zip, or page with links to everything?)
 	(/env?)/:env_slug/:env_ver_slug/:entity_slug/:file_slug <- single file (if above is page with links, then maybe no need for this)
 	(/env?)/:env_slug/:env_ver_slug/:entity_slug <- entire package
+	this is what the (virtual) .sls file should link to under pkgs...
+	Still need to find out if this can be served in the external pillar
+	
 	

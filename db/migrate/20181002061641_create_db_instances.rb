@@ -1,3 +1,4 @@
+# migration
 class CreateDbInstances < ActiveRecord::Migration[5.1]
   def change
     create_table :db_instances do |t|

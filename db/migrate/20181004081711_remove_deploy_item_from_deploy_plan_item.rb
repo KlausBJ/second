@@ -1,5 +1,7 @@
+# migration
 class RemoveDeployItemFromDeployPlanItem < ActiveRecord::Migration[5.1]
   def change
-    # udført manuelt: index droppet, kolonnerne 'deploy_item_type' og 'deploy_item_id' fjernet
+    # performed manually: index dropped, columns
+    # 'deploy_item_type' og 'deploy_item_id' removed
   end
 end

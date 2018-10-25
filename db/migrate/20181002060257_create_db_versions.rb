@@ -1,3 +1,4 @@
+# migration
 class CreateDbVersions < ActiveRecord::Migration[5.1]
   def change
     create_table :db_versions do |t|

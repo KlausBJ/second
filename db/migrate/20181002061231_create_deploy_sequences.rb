@@ -1,3 +1,4 @@
+# migration
 class CreateDeploySequences < ActiveRecord::Migration[5.1]
   def change
     create_table :deploy_sequences do |t|
