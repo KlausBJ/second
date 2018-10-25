@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  deploy_log: one
+  entity_instance: one
+  entity_instance_type: Entity instance
+
+two:
+  deploy_log: two
+  entity_instance: two
+  entity_instance_type: Entity instance
