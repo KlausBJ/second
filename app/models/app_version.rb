@@ -32,4 +32,10 @@ class AppVersion < ApplicationRecord
   def parent
     app
   end
+  
+  def clone(name)
+    clone = amoeba_dup
+    clone.app = App.create!(name: name)
+    return clone
+  end
 end
