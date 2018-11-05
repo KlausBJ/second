@@ -4,6 +4,10 @@ class App < ApplicationRecord
   has_many :interfaces, as: :entity, dependent: :destroy
   has_many :dependee_masks, as: :dependee_entity, dependent: :destroy
 
+	alias_attribute :versions, :app_versions
+
+  validates :name, presence: true, uniqueness: true
+
   after_create :init_app_versions
 
   # test created and passed

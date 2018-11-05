@@ -11,6 +11,8 @@ class DbVersion < ApplicationRecord
   has_many :dependencies, as: :depender, dependent: :destroy
   has_many :db_instances, dependent: :destroy
 
+  alias_attribute :parent, :db
+
   amoeba do
     customize(lambda { |original_ver, new_ver|
       new_ver.version = original_ver.version.succ
@@ -27,9 +29,5 @@ class DbVersion < ApplicationRecord
   # new_ver?
   def next
     DbVersion.create db_id: db_id, version: version.succ
-  end
-
-  def parent
-    db
   end
 end
