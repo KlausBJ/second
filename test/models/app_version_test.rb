@@ -10,4 +10,21 @@ class AppVersionTest < ActiveSupport::TestCase
     assert new_av.app != av.app
     assert new_av.app.name == 'TestApp2'
   end
+
+  test 'AppVersion can have Package, Script, Template' do
+    app = App.create!(name: 'TestApp')
+    av = app.app_versions.last
+    f1 = FileObject.create filename: 'autoexec.bat'
+    s = Script.new file_object: f1, entity_version: av
+    assert s.save
+    assert av.scripts.any?
+    f2 = FileObject.create filename: 'overfoersel.zip'
+    p = Package.new file_object: f2, entity_version: av
+    assert p.save
+    assert av.packages.any?
+    f3 = FileObject.create filename: 'win.ini'
+    t = Template.new file_object: f3, entity_version: av
+    assert t.save
+    assert av.templates.any?
+  end
 end

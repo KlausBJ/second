@@ -6,6 +6,7 @@ class EnvVersion < ApplicationRecord
   has_many :db_instances, dependent: :destroy
   has_many :deploy_plans, dependent: :destroy
   has_many :ru_instances, dependent: :destroy
+  has_many :deploy_logs # do NOT destroy!
 
   amoeba do
     customize(lambda { |original_ver, new_ver|

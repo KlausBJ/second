@@ -30,4 +30,15 @@ class DbVersion < ApplicationRecord
   def next
     DbVersion.create db_id: db_id, version: version.succ
   end
+
+  def name
+    parent.name
+  end
+
+  def clone(name)
+    dv = amoeba_dup
+    dv.db = Db.new(name: name)
+    dv.save
+    return dv
+  end
 end

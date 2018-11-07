@@ -2,6 +2,8 @@
 class ReleaseUnit < ApplicationRecord
   has_many :ru_versions, dependent: :destroy
 
+  alias_attribute :versions, :ru_versions
+
   after_create :init_ru_versions
 
   # intentionally no amoeba block here
