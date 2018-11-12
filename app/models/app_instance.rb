@@ -17,7 +17,7 @@ class AppInstance < ApplicationRecord
   amoeba do
     include_association :deploy_plan_items
     include_association :properties
-    include_association :entity_logs # Really? I don't think so...
+    include_association :entity_logs # # For new EnvVersion, yes - for cloned Environment, no
   end
 
   def deploy_ready?

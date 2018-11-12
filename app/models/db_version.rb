@@ -12,6 +12,7 @@ class DbVersion < ApplicationRecord
   has_many :db_instances, dependent: :destroy
 
   alias_attribute :parent, :db
+  alias_attribute :instances, :db_instances
 
   amoeba do
     customize(lambda { |original_ver, new_ver|

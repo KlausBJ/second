@@ -14,6 +14,7 @@ class AppVersion < ApplicationRecord
   has_many :app_instances, dependent: :destroy
 
   alias_attribute :parent, :app
+  alias_attribute :instances, :app_instances
 
   amoeba do
     customize(lambda { |original_ver, new_ver|
@@ -32,7 +33,7 @@ class AppVersion < ApplicationRecord
   def next
     AppVersion.create app_id: app_id, version: version.succ
   end
-  
+
   def name
     parent.name
   end
