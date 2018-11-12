@@ -2,10 +2,12 @@
 
 one:
   deploy_log: one
+  content: MyText
   entity_instance: one
   entity_instance_type: Entity instance
 
 two:
   deploy_log: two
+  content: MyText
   entity_instance: two
   entity_instance_type: Entity instance

@@ -2,10 +2,8 @@
 
 one:
   env_version: one
-  content: MyText
   deployed: false
 
 two:
   env_version: two
-  content: MyText
   deployed: false
