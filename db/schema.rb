@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112104540) do
+ActiveRecord::Schema.define(version: 20181112143814) do
 
   create_table "app_instances", force: :cascade do |t|
     t.bigint "app_version_id"
@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(version: 20181112104540) do
   end
 
   create_table "dependee_masks", force: :cascade do |t|
-    t.bigint "interface_id"
-    t.boolean "interface_not"
+    t.bigint "variant_id"
+    t.boolean "variant_not"
     t.string "version_regex"
     t.string "dependee_entity_type"
     t.bigint "dependee_entity_id"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20181112104540) do
     t.bigint "dependency_id"
     t.index ["dependee_entity_type", "dependee_entity_id"], name: "dependee_mask_dependee_entity__type_and_id"
     t.index ["dependency_id"], name: "index_dependee_masks_on_dependency_id"
-    t.index ["interface_id"], name: "index_dependee_masks_on_interface_id"
+    t.index ["variant_id"], name: "index_dependee_masks_on_variant_id"
   end
 
   create_table "dependencies", force: :cascade do |t|
@@ -183,25 +183,6 @@ ActiveRecord::Schema.define(version: 20181112104540) do
     t.index ["ru_version_id"], name: "index_inclusions_on_ru_version_id"
   end
 
-  create_table "interface_mappings", force: :cascade do |t|
-    t.bigint "interface_id"
-    t.string "entity_version_type"
-    t.bigint "entity_version_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["entity_version_type", "entity_version_id"], name: "interface_mapping_entity_version__type_and_id"
-    t.index ["interface_id"], name: "index_interface_mappings_on_interface_id"
-  end
-
-  create_table "interfaces", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "entity_type"
-    t.bigint "entity_id"
-    t.index ["entity_type", "entity_id"], name: "index_interfaces_on_entity_type_and_entity_id"
-  end
-
   create_table "packages", force: :cascade do |t|
     t.integer "order"
     t.bigint "file_object_id"
@@ -278,6 +259,25 @@ ActiveRecord::Schema.define(version: 20181112104540) do
     t.index ["file_object_id"], name: "index_templates_on_file_object_id"
   end
 
+  create_table "variant_mappings", force: :cascade do |t|
+    t.bigint "variant_id"
+    t.string "entity_version_type"
+    t.bigint "entity_version_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_version_type", "entity_version_id"], name: "interface_mapping_entity_version__type_and_id"
+    t.index ["variant_id"], name: "index_variant_mappings_on_variant_id"
+  end
+
+  create_table "variants", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "entity_type"
+    t.bigint "entity_id"
+    t.index ["entity_type", "entity_id"], name: "index_variants_on_entity_type_and_entity_id"
+  end
+
   add_foreign_key "app_instances", "app_versions"
   add_foreign_key "app_instances", "env_versions"
   add_foreign_key "app_instances", "ru_instances"
@@ -287,7 +287,7 @@ ActiveRecord::Schema.define(version: 20181112104540) do
   add_foreign_key "db_instances", "ru_instances"
   add_foreign_key "db_versions", "dbs"
   add_foreign_key "dependee_masks", "dependencies"
-  add_foreign_key "dependee_masks", "interfaces"
+  add_foreign_key "dependee_masks", "variants"
   add_foreign_key "dependencies", "deploy_sequences"
   add_foreign_key "dependencies", "deploy_triggers"
   add_foreign_key "deploy_logs", "env_versions"
@@ -296,11 +296,11 @@ ActiveRecord::Schema.define(version: 20181112104540) do
   add_foreign_key "entity_logs", "deploy_logs"
   add_foreign_key "env_versions", "environments"
   add_foreign_key "inclusions", "ru_versions"
-  add_foreign_key "interface_mappings", "interfaces"
   add_foreign_key "packages", "file_objects"
   add_foreign_key "ru_instances", "env_versions"
   add_foreign_key "ru_instances", "ru_versions"
   add_foreign_key "ru_versions", "release_units"
   add_foreign_key "scripts", "file_objects"
   add_foreign_key "templates", "file_objects"
+  add_foreign_key "variant_mappings", "variants"
 end

@@ -1,35 +1,35 @@
 require 'test_helper'
 
-class InterfaceTest < ActiveSupport::TestCase
+class VariantTest < ActiveSupport::TestCase
   test "links to app or db" do
-    a = App.create! name: 'InterfaceTestApp'
+    a = App.create! name: 'VariantTestApp'
     av = a.versions.last
-    aim = InterfaceMapping.create! name: 'Test', entity_version: av
-    ai = aim.interface
+    aim = VariantMapping.create! name: 'Test', entity_version: av
+    ai = aim.variant
     assert aim.persisted?
     assert ai.persisted?
-    assert av.interfaces.any?
-    assert ai.interface_mappings.any?
+    assert av.variants.any?
+    assert ai.variant_mappings.any?
     ai.destroy!
     assert ai.destroyed?
     # assert aim.destroyed? will fail, but it is in fact gone from the database
-    assert InterfaceMapping.where(id: aim.id).none?
-    assert av.interfaces.none?
-    assert av.interface_mappings.none?
+    assert VariantMapping.where(id: aim.id).none?
+    assert av.variants.none?
+    assert av.variant_mappings.none?
 
-    d = Db.create! name: 'InterfaceTestDb'
+    d = Db.create! name: 'VariantTestDb'
     dv = d.versions.last
-    dim = InterfaceMapping.create! name: 'Test', entity_version: dv
-    di = dim.interface
+    dim = VariantMapping.create! name: 'Test', entity_version: dv
+    di = dim.variant
     assert dim.persisted?
     assert di.persisted?
-    assert dv.interfaces.any?
-    assert di.interface_mappings.any?
+    assert dv.variants.any?
+    assert di.variant_mappings.any?
     di.destroy!
     assert di.destroyed?
     # assert dim.destroyed? will fail, but it is in fact gone from the database
-    assert InterfaceMapping.where(id: dim.id).none?
-    assert dv.interfaces.none?
-    assert dv.interface_mappings.none?
+    assert VariantMapping.where(id: dim.id).none?
+    assert dv.variants.none?
+    assert dv.variant_mappings.none?
   end
 end

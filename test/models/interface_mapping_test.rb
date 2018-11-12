@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class InterfaceMappingTest < ActiveSupport::TestCase
+class VariantMappingTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

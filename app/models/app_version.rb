@@ -4,8 +4,8 @@ class AppVersion < ApplicationRecord
 
   belongs_to :app
   has_many :inclusions, as: :entity_version, dependent: :destroy
-  has_many :interface_mappings, as: :entity_version, dependent: :destroy
-  has_many :interfaces, through: :interface_mappings
+  has_many :variant_mappings, as: :entity_version, dependent: :destroy
+  has_many :variants, through: :variant_mappings
   has_many :packages, as: :entity_version, dependent: :destroy
   has_many :scripts, as: :entity_version, dependent: :destroy
   has_many :templates, as: :entity_version, dependent: :destroy
@@ -21,7 +21,7 @@ class AppVersion < ApplicationRecord
       new_ver.version = original_ver.version.succ
     })
 
-    include_association :interface_mappings
+    include_association :variant_mappings
     include_association :packages
     include_association :scripts
     include_association :templates
