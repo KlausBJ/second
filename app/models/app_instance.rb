@@ -12,12 +12,12 @@ class AppInstance < ApplicationRecord
                        source_type: 'DbInstance'
   has_many :properties, as: :owner, dependent: :destroy
   has_many :entity_logs, as: :entity_instance, dependent: :destroy
-  has_many :deploy_logs, through: :entity_instances
+  has_many :deploy_logs, through: :entity_logs
 
   amoeba do
     include_association :deploy_plan_items
     include_association :properties
-    include_association :entity_logs
+    include_association :entity_logs # Really? I don't think so...
   end
 
   def deploy_ready?
