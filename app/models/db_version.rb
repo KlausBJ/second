@@ -1,5 +1,7 @@
 # Versions of Db
 class DbVersion < ApplicationRecord
+  include VersionChecker
+
   belongs_to :db
   has_many :inclusions, as: :entity_version, dependent: :destroy
   has_many :variant_mappings, as: :entity_version, dependent: :destroy
@@ -13,6 +15,10 @@ class DbVersion < ApplicationRecord
 
   alias_attribute :parent, :db
   alias_attribute :instances, :db_instances
+
+  validate do
+    int_ver_unique? version, variant
+  end
 
   amoeba do
     customize(lambda { |original_ver, new_ver|

@@ -16,6 +16,10 @@ class AppVersion < ApplicationRecord
   alias_attribute :parent, :app
   alias_attribute :instances, :app_instances
 
+  validate do
+    int_ver_unique? version, variant
+  end
+
   amoeba do
     customize(lambda { |original_ver, new_ver|
       new_ver.version = original_ver.version.succ

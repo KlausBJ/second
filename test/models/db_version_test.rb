@@ -27,4 +27,16 @@ class DbVersionTest < ActiveSupport::TestCase
     assert t.save
     assert dv.templates.any?
   end
+
+  test 'validates version and interface uniqueness' do
+    db = Db.create!(name: 'TestDb')
+    dv = db.versions.last
+    VariantMapping.create! name: 'Test', entity_version: dv
+    assert dv.variant == 'Test'
+    dv2 = dv.next
+    assert dv2.variant == ''
+    assert dv2.variant = dv.variant
+    puts "variant: " + dv2.variant
+    assert_not dv2.valid?
+  end
 end

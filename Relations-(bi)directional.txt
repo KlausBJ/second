@@ -1,0 +1,58 @@
+Search "belongs_to" (37 hits in 20 files)
+  T:\second\app\models\package.rb 
+	   belongs_to :file_object
+	   belongs_to :entity_version, polymorphic: true
+  T:\second\app\models\deploy_plan_item.rb 
+	   belongs_to :deploy_plan
+	   belongs_to :entity_instance, polymorphic: true 
+	   belongs_to :after_item, polymorphic: true, optional: true 
+  T:\second\app\models\property.rb 
+	   belongs_to :owner, polymorphic: true
+  T:\second\app\models\db_instance.rb 
+	   belongs_to :db_version
+	   belongs_to :env_version
+	   belongs_to :ru_instance, optional: true
+  T:\second\app\models\entity_log.rb 
+	   belongs_to :deploy_log
+	   belongs_to :entity_instance, polymorphic: true
+  T:\second\app\models\dependee_mask.rb 
+	   belongs_to :dependency
+	   belongs_to :interface
+	   belongs_to :dependee_entity, polymorphic: true
+  T:\second\app\models\env_version.rb 
+	   belongs_to :environment
+  T:\second\app\models\template.rb 
+	   belongs_to :file_object
+	   belongs_to :entity_version, polymorphic: true
+  T:\second\app\models\app_version.rb 
+	   belongs_to :app
+  T:\second\app\models\app_instance.rb 
+	   belongs_to :app_version
+	   belongs_to :env_version
+	   belongs_to :ru_instance, optional: true
+  T:\second\app\models\deploy_log.rb 
+	   belongs_to :env_version
+  T:\second\app\models\inclusion.rb 
+	   belongs_to :ru_version
+	   belongs_to :entity_version, polymorphic: true
+  T:\second\app\models\script.rb 
+	   belongs_to :file_object
+	   belongs_to :entity_version, polymorphic: true
+  T:\second\app\models\dependency.rb 
+	   belongs_to :depender, polymorphic: true
+	   belongs_to :deploy_sequence
+	   belongs_to :deploy_trigger
+  T:\second\app\models\deploy_plan.rb 
+	   belongs_to :env_version
+  T:\second\app\models\interface.rb 
+	   belongs_to :entity, polymorphic: true
+  T:\second\app\models\db_version.rb 
+	   belongs_to :db
+  T:\second\app\models\ru_instance.rb 
+	   belongs_to :ru_version, optional: true
+	   belongs_to :env_version
+  T:\second\app\models\ru_version.rb 
+	   belongs_to :release_unit
+  T:\second\app\models\interface_mapping.rb 
+	   belongs_to :interface
+	   belongs_to :entity_version, polymorphic: true

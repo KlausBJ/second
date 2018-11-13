@@ -1,0 +1,2 @@
+module DbVersionsHelper
+end

@@ -1,0 +1,108 @@
+Relations, to be tested:
+
+*package:							*fileobject
+											*entity_version (p)
+													*app_version
+													*db_version
+
+
+*script:							*file_object
+											*entity_version (p)
+													*app_version
+													*db_version
+
+
+*template:						*file_object
+											*entity_version (p)
+													*app_version
+													*db_version
+
+
+*deploy_plan:					*env_version
+
+
+*deploy_plan_item: 		*deploy_plan
+											*entity_instance (p)
+													*app_instance
+													*db_instance
+											*after_item (p)
+													*app_instance
+													*db_instance
+
+
+*property: 						*owner (p)
+													*app_version
+													*db_version
+													*env_version
+													*app_instance
+													*db_instance
+
+
+*db_instance: 					*db_version
+											*env_version
+                          Part of property test...
+                      **ru_instance (optional)
+                          Part of ru_version_test
+
+
+*entity_log:					*deploy_log
+											*entity_instance (p)
+													*app_instance
+													*db_instance
+
+
+*dependee_mask: 				*entity_version
+                          *app_version
+                          *db_version
+                      *dependency
+
+
+*env_version:					*environment
+
+
+*app_version:					*app
+
+
+*app_instance:					*app_version
+											*env_version
+                          Part of property test...
+											**ru_instance (optional)
+                          Part of ru_version_test
+
+
+*deploy_log:						*env_version
+
+
+*inclusion:						*ru_version
+											*entity_version (p)
+													*app_version
+													*db_version
+
+
+*dependency:						*depender (p)
+													*app_version
+													*db_version
+											*deploy_sequence
+											*deploy_trigger
+
+
+*interface:						*entity (p)
+													*app
+													*db
+
+
+*db_version:						*db
+
+
+*ru_instance:					*ru_version
+											*env_version
+
+
+*ru_version:						*release_unit
+
+
+*interface_mapping:		*interface
+											*entity_version (p)
+													*app_version
+													*db_version
+
