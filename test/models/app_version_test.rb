@@ -27,4 +27,20 @@ class AppVersionTest < ActiveSupport::TestCase
     assert t.save
     assert av.templates.any?
   end
+
+  test 'validates version and interface uniqueness' do
+    app = App.create!(name: 'TestApp')
+    av = app.versions.last
+    v = Variant.find_or_create_by name: 'Test', entity: app
+    av.variants << v
+    assert av.variant == 'Test'
+    av.save
+    av2 = av.next
+    assert_not (av.id == av2.id)
+    assert av.variants.any?
+    assert av2.variants.any?
+    assert av2.variant == 'Test'
+    av2.version = '1.0'
+    assert_not av2.save
+  end
 end

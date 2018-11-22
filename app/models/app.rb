@@ -1,8 +1,8 @@
 # Application - versioned
 class App < ApplicationRecord
-  has_many :app_versions, dependent: :destroy
-  has_many :variants, as: :entity, dependent: :destroy
-  has_many :dependee_masks, as: :dependee_entity, dependent: :destroy
+  has_many :app_versions, dependent: :destroy, inverse_of: :app
+  has_many :variants, as: :entity, dependent: :destroy, inverse_of: :entity
+  has_many :dependee_masks, as: :dependee_entity, dependent: :destroy, inverse_of: :dependee_entity
 
 	alias_attribute :versions, :app_versions
 

@@ -1,15 +1,16 @@
 # versions of ReleaseUnit
 class RuVersion < ApplicationRecord
   # No need to "deep" deep copy this... Copy inclusions, not their targets
-  belongs_to :release_unit
-  has_many :inclusions, dependent: :destroy
+  belongs_to :release_unit, inverse_of: :ru_versions
+  has_many :inclusions, dependent: :destroy, inverse_of: :ru_version
   has_many :app_versions, through: :inclusions,
                           source: :entity,
                           source_type: 'AppVersion'
   has_many :db_versions, through: :inclusions,
                          source: :entity,
                          source_type: 'DbVersion'
-  has_many :ru_instances
+  has_many :ru_instances, inverse_of: :ru_version
+
   # can remain after a deletion... perhaps name (and version?) should be copied
   # to a local property (DisplayName?), if ru_version is deleted?
   # + ru_version_id should be unset!

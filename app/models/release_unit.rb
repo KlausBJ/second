@@ -1,6 +1,6 @@
 # ReleaseUnit - versioned - optional container for AppVersions and/or DbVersions
 class ReleaseUnit < ApplicationRecord
-  has_many :ru_versions, dependent: :destroy
+  has_many :ru_versions, dependent: :destroy, inverse_of: :release_unit
 
   alias_attribute :versions, :ru_versions
 

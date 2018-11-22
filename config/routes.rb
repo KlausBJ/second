@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  get 'env_versions/new'
+
+  get 'env_versions/index'
+
+  get 'env_versions/edit'
+
+  get 'env_versions/update'
+
+  get 'env_versions/delete'
+
+  get 'env_versions/next'
+
+  get 'env_versions/clone'
+
   get 'app_versions/new'
 
   get 'app_versions/index'

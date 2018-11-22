@@ -1,8 +1,8 @@
 # Databases - versioned
 class Db < ApplicationRecord
-  has_many :db_versions, dependent: :destroy
-  has_many :variants, as: :entity, dependent: :destroy
-  has_many :dependee_masks, as: :dependee_entity, dependent: :destroy
+  has_many :db_versions, dependent: :destroy, inverse_of: :db
+  has_many :variants, as: :entity, dependent: :destroy, inverse_of: :entity
+  has_many :dependee_masks, as: :dependee_entity, dependent: :destroy, inverse_of: :dependee_entity
 
   alias_attribute :versions, :db_versions
 

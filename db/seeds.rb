@@ -20,9 +20,9 @@ end
 # Create some Apps with AppVersions and some Dbs with DbVersions
 (1..25).each do |num|
   app = App.create!(name: "App_#{num}")
-  AppVersion.create!(app: app, version: '1.0')
+  #AppVersion.create!(app: app, version: '1.0')
   db = Db.create!(name: "Db_#{num}")
-  DbVersion.create!(db: db, version: '1.0')
+  #DbVersion.create!(db: db, version: '1.0')
   (1..9).each do |vernum|
     ev = env.env_versions[vernum]
     av = app.app_versions.last.next

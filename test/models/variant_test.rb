@@ -1,10 +1,11 @@
 require 'test_helper'
 
 class VariantTest < ActiveSupport::TestCase
-  test "links to app or db" do
+  test "variant relates to app or db" do
     a = App.create! name: 'VariantTestApp'
     av = a.versions.last
-    aim = VariantMapping.create! name: 'Test', entity_version: av
+    v = Variant.create name: 'Test', entity: a
+    aim = VariantMapping.create! variant: v, entity_version: av
     ai = aim.variant
     assert aim.persisted?
     assert ai.persisted?
@@ -19,7 +20,8 @@ class VariantTest < ActiveSupport::TestCase
 
     d = Db.create! name: 'VariantTestDb'
     dv = d.versions.last
-    dim = VariantMapping.create! name: 'Test', entity_version: dv
+    v = Variant.create name: 'Test', entity: d
+    dim = VariantMapping.create! variant: v, entity_version: dv
     di = dim.variant
     assert dim.persisted?
     assert di.persisted?

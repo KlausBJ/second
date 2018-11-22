@@ -4,4 +4,9 @@ class Dependency < ApplicationRecord
   belongs_to :deploy_sequence, optional: true
   belongs_to :deploy_trigger, optional: true
   has_many :dependee_masks, dependent: :destroy
+
+  def candidates(instance)
+    puts 'Dependency#candidates called.'
+    return 1
+  end
 end
