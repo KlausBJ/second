@@ -1,11 +1,11 @@
 # Dependency - describes the relation between depender and dependee
 class Dependency < ApplicationRecord
-  belongs_to :depender, polymorphic: true
-  belongs_to :deploy_sequence, optional: true
-  belongs_to :deploy_trigger, optional: true
-  has_many :dependee_masks, dependent: :destroy
+  belongs_to :depender, class_name: 'Version', inverse_of: :dependencies
+  belongs_to :sequence, optional: true, inverse_of: :dependencies
+  belongs_to :trigger, optional: true, inverse_of: :dependencies
+  has_many :dependee_masks, dependent: :destroy, inverse_of: :dependency
 
-  def candidates(instance)
+  def candidates(instance) #temporary - should perhaps be in the Version class?
     puts 'Dependency#candidates called.'
     return 1
   end

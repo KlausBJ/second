@@ -1,5 +1,5 @@
-# Relation between FileObject and AppVersion or DbVersion of type Template
+# Relation between File and Version of type Template
 class Template < ApplicationRecord
-  belongs_to :file_object, inverse_of: :templates
-  belongs_to :entity_version, polymorphic: true, inverse_of: :templates
+  belongs_to :file, class_name: 'AsciiFile', inverse_of: :templates
+  belongs_to :version, inverse_of: :templates
 end

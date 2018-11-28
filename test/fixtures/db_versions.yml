@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  version: MyString
-  db: one
-
-two:
-  version: MyString
-  db: two

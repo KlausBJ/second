@@ -3,10 +3,10 @@ require 'test_helper'
 class RuVersionTest < ActiveSupport::TestCase
   test 'ru_version should relate to ru_instance' do
     ru = ReleaseUnit.create!(name: 'TestRU')
-    ruv = ru.versions.last
+    ruv = ru.versions.create name: '1.0'
     assert ruv.persisted?
     e = Environment.create! name: 'RuInstanceTest'
-    ev = e.versions.last
+    ev = e.versions.create name: '1.0'
     assert ev.persisted?
     rui = RuInstance.new ru_version: ruv, env_version: ev
     assert rui.save!
@@ -14,22 +14,22 @@ class RuVersionTest < ActiveSupport::TestCase
 
   test 'ru_version and instance full relation test' do
     app = App.create!(name: 'TestApp')
-    av = app.app_versions.last
+    av = app.versions.create name: '1.0'
     db = Db.create!(name: 'TestDb')
-    dv = db.versions.last
+    dv = db.versions.create name: '1.0'
     ru = ReleaseUnit.create!(name: 'TestRU')
-    ruv = ru.versions.last
-    i1 = Inclusion.new ru_version: ruv, entity_version: av
+    ruv = ru.versions.create name: '1.0'
+    i1 = Inclusion.new ru_version: ruv, version: av
     assert i1.save!
-    i2 = Inclusion.new ru_version: ruv, entity_version: dv
+    i2 = Inclusion.new ru_version: ruv, version: dv
     assert i2.save!
     e = Environment.create! name: 'RuInstanceFullRelationTest'
-    ev = e.versions.last
+    ev = e.versions.create name: '1.0'
     rui = RuInstance.new ru_version: ruv, env_version: ev
     assert rui.save!
-    ai = AppInstance.new env_version: ev, app_version: av, ru_instance: rui
+    ai = Instance.new env_version: ev, version: av, ru_instance: rui, implementation: Implementation.create(env_version: ev)
     assert ai.save!
-    di = DbInstance.new env_version: ev, db_version: dv, ru_instance: rui
+    di = Instance.new env_version: ev, version: dv, ru_instance: rui, implementation: Implementation.create(env_version: ev)
     assert di.save!
   end
 end

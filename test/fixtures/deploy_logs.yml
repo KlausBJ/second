@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  env_version: one
-  deployed: false
-
-two:
-  env_version: two
-  deployed: false

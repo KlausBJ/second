@@ -1,14 +1,14 @@
 require 'test_helper'
 
 class ScriptTest < ActiveSupport::TestCase
-  test "should have file_object and entity_version" do
+  test "should have file and version" do
 		s = Script.new
 		assert_not s.save
-    f = FileObject.create
+    f = AsciiFile.create
 		a = App.create name: 'App01'
-		av = a.app_versions.first
-		s.file_object = f
-		s.entity_version = av
+		av = a.versions.create name: '1.0'
+		s.file = f
+		s.version = av
 		assert s.save
   end
 end

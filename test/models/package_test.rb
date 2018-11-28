@@ -1,14 +1,14 @@
 require 'test_helper'
 
 class PackageTest < ActiveSupport::TestCase
-  test "should have file_object and entity_version" do
+  test "should have file and version" do
 		p = Package.new
 		assert_not p.save
-    f = FileObject.create
+    f = BinaryFile.create
 		a = App.create name: 'App01'
-		av = a.app_versions.first
-		p.file_object = f
-		p.entity_version = av
+		av = a.versions.create name: '1.0'
+		p.file = f
+		p.version = av
 		assert p.save
   end
 end

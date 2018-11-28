@@ -17,80 +17,80 @@ EnvVersion.create!(environment: env, version: '1.0')
   ev.save
 end
 
-# Create some Apps with AppVersions and some Dbs with DbVersions
+# Create some Apps and Dbs with Versions
 (1..25).each do |num|
   app = App.create!(name: "App_#{num}")
-  #AppVersion.create!(app: app, version: '1.0')
+  Version.create!(deployable: app, version: '1.0')
   db = Db.create!(name: "Db_#{num}")
-  #DbVersion.create!(db: db, version: '1.0')
+  Version.create!(deployable: db, version: '1.0')
   (1..9).each do |vernum|
     ev = env.env_versions[vernum]
-    av = app.app_versions.last.next
+    av = app.versions.last.next
     av.save
-    fop = FileObject.create!(
+    fop = File.create!(
       path: "\\server\share\package_#{num * vernum * 3}.zip",
       filename: "package_#{num * vernum * 3}.zip"
     )
-    fos = FileObject.create!(
+    fos = File.create!(
       path: "\\server\share\script_#{num * vernum * 3}.ps1",
       filename: "script_#{num * vernum * 3 + 1}.ps1"
     )
-    fot = FileObject.create!(
+    fot = File.create!(
       path: "\\server\share\template_#{num * vernum * 3}.ini",
       filename: "template_#{num * vernum * 3 + 2}.ini"
     )
-    Package.create!(order: 0, file_object: fop, entity_version: av)
-    Script.create!(order: 0, file_object: fos, entity_version: av)
+    Package.create!(order: 0, file: fop, version: av)
+    Script.create!(order: 0, file: fos, version: av)
     Template.create!(
-      file_object: fot,
+      file: fot,
       path: "folder\template_#{num * vernum * 3}.ini",
-      entity_version: av
+      version: av
     )
-    dv = db.db_versions.last.next
+    dv = db.versions.last.next
     dv.save
-    fop = FileObject.create!(
+    fop = File.create!(
       path: "\\server\share\package_#{num * vernum * 3}.bak",
       filename: "package_#{num * vernum * 3}.bak"
     )
-    fos = FileObject.create!(
+    fos = File.create!(
       path: "\\server\share\script_#{num * vernum * 3}.sql",
       filename: "script_#{num * vernum * 3 + 1}.sql"
     )
-    fot = FileObject.create!(
+    fot = File.create!(
       path: "\\server\share\template_#{num * vernum * 3}.csv",
       filename: "template_#{num * vernum * 3 + 2}.csv"
     )
-    Package.create!(order: 0, file_object: fop, entity_version: dv)
-    Script.create!(order: 0, file_object: fos, entity_version: dv)
+    Package.create!(order: 0, file: fop, version: dv)
+    Script.create!(order: 0, file: fos, version: dv)
     Template.create!(
-      file_object: fot, path: "folder\template_#{num * vernum * 3}.csv",
-      entity_version: dv
+      file: fot, path: "folder\template_#{num * vernum * 3}.csv",
+      version: dv
     )
     dp = DeployPlan.create!(env_version: ev)
-    ai = AppInstance.create!(app_version: av, env_version: ev)
-    di = DbInstance.create!(db_version: dv, env_version: ev)
+    ai = Instance.create!(version: av, env_version: ev)
+    di = Instance.create!(version: dv, env_version: ev)
     dla = DeployLog.create!(env_version: ev, deployed: false)
     dld = DeployLog.create!(env_version: ev, deployed: false)
-    EntityLog.create!(entity_instance: ai, deploy_log: dla)
-    EntityLog.create!(entity_instance: di, deploy_log: dld)
+    EntityLog.create!(instance: ai, deploy_log: dla)
+    EntityLog.create!(instance: di, deploy_log: dld)
     if vernum.even?
       DeployPlanItem.create!(
         deploy_plan: dp,
-        entity_instance: ai,
+        instance: ai,
         after_item: di
       )
       DeployPlanItem.create!(
         deploy_plan: dp,
-        entity_instance: di
+        instance: di
       )
     else
       DeployPlanItem.create!(
         deploy_plan: dp,
-        entity_instance: ai
+        instance: ai
       )
       DeployPlanItem.create!(
         deploy_plan: dp,
-        entity_instance: di,
+        instance: di,
         after_item: ai
       )
     end
