@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181127134108) do
+ActiveRecord::Schema.define(version: 20181128062558) do
 
   create_table "dependee_masks", force: :cascade do |t|
     t.bigint "variant_id"
@@ -197,6 +197,20 @@ ActiveRecord::Schema.define(version: 20181127134108) do
     t.index ["file_id"], name: "index_scripts_on_file_id"
   end
 
+  create_table "selections", force: :cascade do |t|
+    t.bigint "implementation_id"
+    t.bigint "dependency_id"
+    t.bigint "env_version_id"
+    t.bigint "selected_id"
+    t.boolean "ambiguous"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dependency_id"], name: "index_selections_on_dependency_id"
+    t.index ["env_version_id"], name: "index_selections_on_env_version_id"
+    t.index ["implementation_id"], name: "index_selections_on_implementation_id"
+    t.index ["selected_id"], name: "index_selections_on_selected_id"
+  end
+
   create_table "sequences", force: :cascade do |t|
     t.string "name"
     t.boolean "after"
@@ -290,6 +304,10 @@ ActiveRecord::Schema.define(version: 20181127134108) do
   add_foreign_key "ru_versions", "release_units"
   add_foreign_key "scripts", "files"
   add_foreign_key "scripts", "versions"
+  add_foreign_key "selections", "dependencies"
+  add_foreign_key "selections", "env_versions"
+  add_foreign_key "selections", "implementations"
+  add_foreign_key "selections", "instances", column: "selected_id"
   add_foreign_key "templates", "files"
   add_foreign_key "templates", "versions"
   add_foreign_key "variant_versions", "variants"

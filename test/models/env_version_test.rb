@@ -94,24 +94,40 @@ class EnvVersionTest < ActiveSupport::TestCase
     dl = DeployLog.create env_version: ev
     a = App.create name: 'TestApp'
     av = a.versions.create name: '1.0'
-    ai = Instance.create version: av, env_version: ev
+    ai = Instance.create version: av, env_version: ev, implementation: Implementation.create(env_version: ev)
     d = Db.create name: 'TestDb'
     dv = d.versions.create name: '1.0'
+    dv2 = d.versions.create name: '1.1'
     ds = Sequence.create name: 'Deploy after', after: true
+    assert ds.persisted?
     follow = Trigger.create! name: 'go along with', follow: true, lead: false
+    assert follow.persisted?
     lead = Trigger.create! name: 'bring along', follow: false, lead: true
+    assert lead.persisted?
     mutual = Trigger.create! name: 'go along with and bring along', follow: true, lead: true
-    ad = Dependency.create name: 'Database', depender: av, sequence: ds, trigger: follow
+    ad = Dependency.create! name: 'Database', depender: av, sequence: ds, trigger: follow
+    assert ad.persisted?
+    assert ad.depender == av
+    av.reload
+    assert av.dependencies.any?
     dm = DependeeMask.create dependency: ad, dependee: d, version_regex: ''
-    di = Instance.create version: dv, env_version: ev
-    p1 = Property.create name: 'AppProperty', content: '42', overridable: false, owner: ai
+    ai.reload
+    assert ai.dependencies.any?
+    di = Instance.create version: dv, env_version: ev, implementation: Implementation.create(env_version: ev)
+    di2 = Instance.create version: dv2, env_version: ev, implementation: Implementation.create(env_version: ev)
+    p1 = Property.create name: 'AppProperty', content: '41', overridable: false, owner: ai
     p2 = Property.create name: 'DbProperty', content: '42', overridable: false, owner: di
-    p3 = Property.create name: 'EnvProperty', content: '42', overridable: false, owner: ev
+    p2a = Property.create name: 'DbProperty', content: '44', overridable: false, owner: di2
+    p3 = Property.create name: 'EnvProperty', content: '43', overridable: false, owner: ev
     dp = DeployPlan.create env_version: ev
     dpi1 = DeployPlanItem.create deploy_plan: dp, instance: di
-    #puts 'database_candidates: ' + ai.database_candidates.to_s
-    #assert ai.database_candidates
-    #puts 'database: ' + ai.database.to_s
-    #assert ai.database == di
+    assert ai.appproperty == '41'
+    assert ai.env.envproperty == '43'
+    assert ai.dependees(ai.dependencies.first).any?
+    assert ai.dependees(ai.dependencies.first).include? di
+    assert_not ai.database == di
+    ads = Selection.create! implementation: ai.implementation, dependency: ai.dependencies.first, env_version: ev, selected: ai.dependees(ai.dependencies.first).first
+    assert ai.database == di
+    assert ai.database.dbproperty == '42'
   end
 end
