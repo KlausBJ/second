@@ -129,5 +129,13 @@ class EnvVersionTest < ActiveSupport::TestCase
     ads = Selection.create! implementation: ai.implementation, dependency: ai.dependencies.first, env_version: ev, selected: ai.dependees(ai.dependencies.first).first
     assert ai.database == di
     assert ai.database.dbproperty == '42'
+    assert a.to_s == a.name
+    assert d.to_s == d.name
+    assert av.to_s == av.name
+    assert dv.to_s == dv.name
+    ai.name = e.name + ' ' + ev.name + ': ' + a.name + ' ' + av.name
+    di.name = e.name + ' ' + ev.name + ': ' + d.name + ' ' + dv.name
+    assert ai.to_s == ai.name
+    assert di.to_s == di.name
   end
 end

@@ -11,6 +11,7 @@ class EnvVersion < ApplicationRecord
   has_many :implementations, inverse_of: :env_version
   has_many :deltas, class_name: 'Implementation', foreign_key: :changed_in, inverse_of: :changed_in
   has_many :selections, inverse_of: :env_version
+  has_many :dependencies, through: :selections
 
   amoeba do
     puts 'amoeba: visited EnvVersion'
@@ -43,6 +44,10 @@ class EnvVersion < ApplicationRecord
   end
 
   def env
+    environment.name
+  end
+
+  def to_s
     environment.name
   end
 

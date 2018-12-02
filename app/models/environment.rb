@@ -1,6 +1,6 @@
 # Environment - versioned - holds Instances
 class Environment < ApplicationRecord
-  has_many :env_versions, dependent: :destroy, inverse_of: :environment
+  has_many :env_versions, class_name: 'EnvVersion', dependent: :destroy, inverse_of: :environment
 
   alias_attribute :versions, :env_versions
 
