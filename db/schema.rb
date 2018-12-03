@@ -10,7 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181128062558) do
+ActiveRecord::Schema.define(version: 20181203214420) do
+
+  create_table "credential_groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "credential_versions", force: :cascade do |t|
+    t.string "name"
+    t.string "username"
+    t.string "encrypted_password"
+    t.string "encrypted_password_iv"
+    t.string "key"
+    t.string "domain"
+    t.bigint "credential_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["credential_id"], name: "index_credential_versions_on_credential_id"
+  end
+
+  create_table "credentials", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "env_type_id"
+    t.index ["env_type_id"], name: "index_credentials_on_env_type_id"
+  end
+
+  create_table "default_logins", force: :cascade do |t|
+    t.string "name"
+    t.bigint "credential_group_id"
+    t.bigint "version_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["credential_group_id"], name: "index_default_logins_on_credential_group_id"
+    t.index ["version_id"], name: "index_default_logins_on_version_id"
+  end
 
   create_table "dependee_masks", force: :cascade do |t|
     t.bigint "variant_id"
@@ -74,6 +111,12 @@ ActiveRecord::Schema.define(version: 20181128062558) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "env_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "env_versions", force: :cascade do |t|
     t.string "name"
     t.string "account"
@@ -81,6 +124,8 @@ ActiveRecord::Schema.define(version: 20181128062558) do
     t.bigint "environment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "env_type_id"
+    t.index ["env_type_id"], name: "index_env_versions_on_env_type_id"
     t.index ["environment_id"], name: "index_env_versions_on_environment_id"
   end
 
@@ -132,6 +177,16 @@ ActiveRecord::Schema.define(version: 20181128062558) do
     t.index ["implementation_id"], name: "index_instances_on_implementation_id"
     t.index ["ru_instance_id"], name: "index_instances_on_ru_instance_id"
     t.index ["version_id"], name: "index_instances_on_version_id"
+  end
+
+  create_table "logins", force: :cascade do |t|
+    t.string "name"
+    t.bigint "credential_version_id"
+    t.bigint "instance_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["credential_version_id"], name: "index_logins_on_credential_version_id"
+    t.index ["instance_id"], name: "index_logins_on_instance_id"
   end
 
   create_table "logs", force: :cascade do |t|
@@ -276,6 +331,10 @@ ActiveRecord::Schema.define(version: 20181128062558) do
     t.index ["deployable_id"], name: "index_versions_on_deployable_id"
   end
 
+  add_foreign_key "credential_versions", "credentials"
+  add_foreign_key "credentials", "env_types"
+  add_foreign_key "default_logins", "credential_groups"
+  add_foreign_key "default_logins", "versions"
   add_foreign_key "dependee_masks", "dependencies"
   add_foreign_key "dependee_masks", "deployables", column: "dependee_id"
   add_foreign_key "dependee_masks", "variants"
@@ -285,6 +344,7 @@ ActiveRecord::Schema.define(version: 20181128062558) do
   add_foreign_key "deploy_plan_items", "deploy_plans"
   add_foreign_key "deploy_plan_items", "instances"
   add_foreign_key "deploy_plans", "env_versions"
+  add_foreign_key "env_versions", "env_types"
   add_foreign_key "env_versions", "environments"
   add_foreign_key "files", "shares"
   add_foreign_key "implementations", "env_versions"
@@ -295,6 +355,8 @@ ActiveRecord::Schema.define(version: 20181128062558) do
   add_foreign_key "instances", "implementations"
   add_foreign_key "instances", "ru_instances"
   add_foreign_key "instances", "versions"
+  add_foreign_key "logins", "credential_versions"
+  add_foreign_key "logins", "instances"
   add_foreign_key "logs", "deploy_logs"
   add_foreign_key "logs", "instances"
   add_foreign_key "packages", "files"

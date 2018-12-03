@@ -1,5 +1,7 @@
 # Variant - relates to App or Db
 class Variant < ApplicationRecord
+  # name
+
   belongs_to :deployable, inverse_of: :variants
   has_many :variant_versions, dependent: :destroy, inverse_of: :variant
   has_many :versions, through: :variant_versions

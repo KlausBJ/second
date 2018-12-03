@@ -16,7 +16,7 @@ class PropertyTest < ActiveSupport::TestCase
 
   test "Can belong to EnvVersion" do
     e = Environment.create name: 'TestPropertyEnv'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     p = Property.new name: 'TestProperty', content: '42', overridable: false, owner: ev
     assert p.save
     assert ev.properties.any?
@@ -24,7 +24,7 @@ class PropertyTest < ActiveSupport::TestCase
 
   test "Can belong to Instance" do
     e = Environment.create name: 'TestPropertyEnv'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     a = App.create name: 'TestPropertyApp'
     av = a.versions.create name: '1.0'
     ai = Instance.create version: av, env_version: ev, implementation: Implementation.create(env_version: ev)

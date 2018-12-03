@@ -3,7 +3,7 @@ require 'test_helper'
 class DeployLogTest < ActiveSupport::TestCase
   test "the truth" do
     e = Environment.create! name: 'TestDeployLogEnv'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     dl = DeployLog.create! env_version: ev
     assert ev.deploy_logs.any?
     app = App.create!(name: 'TestApp')

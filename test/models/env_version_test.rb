@@ -3,7 +3,7 @@ require 'test_helper'
 class EnvVersionTest < ActiveSupport::TestCase
   test 'can have deploylogs' do
     e = Environment.create name: 'TestDeployLogEnv'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     dl = DeployLog.create env_version: ev
     assert ev.deploy_logs.any?
   end
@@ -11,7 +11,7 @@ class EnvVersionTest < ActiveSupport::TestCase
   test 'can generate new version with same content' do
     e = Environment.create name: 'TestEnvNewVersion'
     assert e.versions.none?
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     assert e.versions.any?
     dl = DeployLog.create env_version: ev
     assert dl.persisted?
@@ -53,7 +53,7 @@ class EnvVersionTest < ActiveSupport::TestCase
 
   test 'can generate new environment with same initial version' do
     e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     ev.reload
     assert ev.persisted?
     dl = DeployLog.create env_version: ev
@@ -90,7 +90,7 @@ class EnvVersionTest < ActiveSupport::TestCase
 
   test 'dependency_handler' do
     e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
     dl = DeployLog.create env_version: ev
     a = App.create name: 'TestApp'
     av = a.versions.create name: '1.0'

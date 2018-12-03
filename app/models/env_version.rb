@@ -1,5 +1,9 @@
 # Versions for Environment
 class EnvVersion < ApplicationRecord
+  # name
+  # account
+  # description
+
   include DependencyHandler # split off the relevant subset as PropertyHandler?
 
   belongs_to :environment, inverse_of: :env_versions
@@ -12,6 +16,9 @@ class EnvVersion < ApplicationRecord
   has_many :deltas, class_name: 'Implementation', foreign_key: :changed_in, inverse_of: :changed_in
   has_many :selections, inverse_of: :env_version
   has_many :dependencies, through: :selections
+  belongs_to :env_type, inverse_of: :env_versions
+  has_many :credentials, through: :env_type
+  has_many :credential_versions,  through: :credentials
 
   amoeba do
     puts 'amoeba: visited EnvVersion'

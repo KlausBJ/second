@@ -1,5 +1,8 @@
 # Dependency - describes the relation between depender and dependee
 class Dependency < ApplicationRecord
+  # name
+  # comment
+
   belongs_to :depender, class_name: 'Version', inverse_of: :dependencies
   belongs_to :sequence, optional: true, inverse_of: :dependencies
   belongs_to :trigger, optional: true, inverse_of: :dependencies

@@ -7,9 +7,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'attr_encrypted'
+
 # Use sqlserver as the database for Active Record
 gem 'activerecord-sqlserver-adapter'
-
+gem 'ruby_smb'
 gem 'amoeba'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

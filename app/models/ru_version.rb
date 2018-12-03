@@ -1,5 +1,7 @@
 # versions of ReleaseUnit
 class RuVersion < ApplicationRecord
+  # name
+
   # No need to "deep" deep copy this... Copy inclusions, not their targets
   belongs_to :release_unit, inverse_of: :ru_versions
   has_many :inclusions, dependent: :destroy, inverse_of: :ru_version
