@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181203214420) do
+ActiveRecord::Schema.define(version: 20181205205537) do
 
   create_table "credential_groups", force: :cascade do |t|
     t.string "name"
@@ -24,11 +24,12 @@ ActiveRecord::Schema.define(version: 20181203214420) do
     t.string "encrypted_password"
     t.string "encrypted_password_iv"
     t.string "key"
-    t.string "domain"
     t.bigint "credential_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "domain_id"
     t.index ["credential_id"], name: "index_credential_versions_on_credential_id"
+    t.index ["domain_id"], name: "index_credential_versions_on_domain_id"
   end
 
   create_table "credentials", force: :cascade do |t|
@@ -36,6 +37,8 @@ ActiveRecord::Schema.define(version: 20181203214420) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "env_type_id"
+    t.bigint "credential_group_id"
+    t.index ["credential_group_id"], name: "index_credentials_on_credential_group_id"
     t.index ["env_type_id"], name: "index_credentials_on_env_type_id"
   end
 
@@ -107,6 +110,14 @@ ActiveRecord::Schema.define(version: 20181203214420) do
   create_table "deployables", force: :cascade do |t|
     t.string "name"
     t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "domains", force: :cascade do |t|
+    t.string "name"
+    t.string "netbios"
+    t.string "dns"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -279,6 +290,9 @@ ActiveRecord::Schema.define(version: 20181203214420) do
     t.string "path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "credential_version_id"
+    t.string "subpath"
+    t.index ["credential_version_id"], name: "index_shares_on_credential_version_id"
   end
 
   create_table "sysdiagrams", primary_key: "diagram_id", id: :integer, force: :cascade do |t|
@@ -332,6 +346,8 @@ ActiveRecord::Schema.define(version: 20181203214420) do
   end
 
   add_foreign_key "credential_versions", "credentials"
+  add_foreign_key "credential_versions", "domains"
+  add_foreign_key "credentials", "credential_groups"
   add_foreign_key "credentials", "env_types"
   add_foreign_key "default_logins", "credential_groups"
   add_foreign_key "default_logins", "versions"
@@ -370,6 +386,7 @@ ActiveRecord::Schema.define(version: 20181203214420) do
   add_foreign_key "selections", "env_versions"
   add_foreign_key "selections", "implementations"
   add_foreign_key "selections", "instances", column: "selected_id"
+  add_foreign_key "shares", "credential_versions"
   add_foreign_key "templates", "files"
   add_foreign_key "templates", "versions"
   add_foreign_key "variant_versions", "variants"
