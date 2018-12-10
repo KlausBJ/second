@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181205205537) do
+ActiveRecord::Schema.define(version: 20181208175212) do
 
   create_table "credential_groups", force: :cascade do |t|
     t.string "name"
@@ -53,8 +53,6 @@ ActiveRecord::Schema.define(version: 20181205205537) do
   end
 
   create_table "dependee_masks", force: :cascade do |t|
-    t.bigint "variant_id"
-    t.boolean "variant_not"
     t.string "version_regex"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -62,7 +60,6 @@ ActiveRecord::Schema.define(version: 20181205205537) do
     t.bigint "dependee_id"
     t.index ["dependee_id"], name: "index_dependee_masks_on_dependee_id"
     t.index ["dependency_id"], name: "index_dependee_masks_on_dependency_id"
-    t.index ["variant_id"], name: "index_dependee_masks_on_variant_id"
   end
 
   create_table "dependencies", force: :cascade do |t|
@@ -321,6 +318,16 @@ ActiveRecord::Schema.define(version: 20181205205537) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "variant_requirements", force: :cascade do |t|
+    t.bigint "variant_id"
+    t.bigint "dependee_mask_id"
+    t.boolean "not"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dependee_mask_id"], name: "index_variant_requirements_on_dependee_mask_id"
+    t.index ["variant_id"], name: "index_variant_requirements_on_variant_id"
+  end
+
   create_table "variant_versions", force: :cascade do |t|
     t.bigint "variant_id"
     t.datetime "created_at", null: false
@@ -353,7 +360,6 @@ ActiveRecord::Schema.define(version: 20181205205537) do
   add_foreign_key "default_logins", "versions"
   add_foreign_key "dependee_masks", "dependencies"
   add_foreign_key "dependee_masks", "deployables", column: "dependee_id"
-  add_foreign_key "dependee_masks", "variants"
   add_foreign_key "dependencies", "triggers"
   add_foreign_key "dependencies", "versions", column: "depender_id"
   add_foreign_key "deploy_logs", "env_versions"
@@ -389,6 +395,8 @@ ActiveRecord::Schema.define(version: 20181205205537) do
   add_foreign_key "shares", "credential_versions"
   add_foreign_key "templates", "files"
   add_foreign_key "templates", "versions"
+  add_foreign_key "variant_requirements", "dependee_masks"
+  add_foreign_key "variant_requirements", "variants"
   add_foreign_key "variant_versions", "variants"
   add_foreign_key "variant_versions", "versions"
   add_foreign_key "variants", "deployables"

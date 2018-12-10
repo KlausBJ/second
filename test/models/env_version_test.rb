@@ -3,7 +3,8 @@ require 'test_helper'
 class EnvVersionTest < ActiveSupport::TestCase
   test 'can have deploylogs' do
     e = Environment.create name: 'TestDeployLogEnv'
-    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
+    ev = e.versions.create  name: '1.0',
+                            env_type: EnvType.find_or_create_by(name: 'Test')
     dl = DeployLog.create env_version: ev
     assert ev.deploy_logs.any?
   end
@@ -11,7 +12,8 @@ class EnvVersionTest < ActiveSupport::TestCase
   test 'can generate new version with same content' do
     e = Environment.create name: 'TestEnvNewVersion'
     assert e.versions.none?
-    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
+    ev = e.versions.create  name: '1.0',
+                            env_type: EnvType.find_or_create_by(name: 'Test')
     assert e.versions.any?
     dl = DeployLog.create env_version: ev
     assert dl.persisted?
@@ -28,11 +30,22 @@ class EnvVersionTest < ActiveSupport::TestCase
     dv = d.versions.create name: '1.0'
     i2 = Implementation.create env_version: ev, changed_in: ev
     assert i2.persisted?
-    di = Instance.create version: dv, env_version: ev, implementation: i2
+    di = Instance.create  version: dv,
+                          env_version: ev,
+                          implementation: i2
     assert ev.instances.any?
-    p1 = Property.create name: 'AppProperty', content: '42', overridable: false, owner: ai
-    p2 = Property.create name: 'DbProperty', content: '42', overridable: false, owner: di
-    p3 = Property.create name: 'EnvProperty', content: '42', overridable: false, owner: ev
+    p1 = Property.create  name: 'AppProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: ai
+    p2 = Property.create  name: 'DbProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: di
+    p3 = Property.create  name: 'EnvProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: ev
     assert ai.properties.any?
     assert di.properties.any?
     assert ev.properties.any?
@@ -45,29 +58,46 @@ class EnvVersionTest < ActiveSupport::TestCase
     assert ev.instances.first.version == ev2.instances.first.version
     assert ev.instances.first.version == ev2.instances.first.version
     assert ev2.properties.first.content == ev.properties.first.content
-    assert ev.instances.first.properties.first.content == ev2.instances.first.properties.first.content
-    assert ev.instances.first.properties.first.content== ev2.instances.first.properties.first.content
+    assert  ev.instances.first.properties.first.content ==
+            ev2.instances.first.properties.first.content
+    assert  ev.instances.first.properties.first.content ==
+            ev2.instances.first.properties.first.content
     assert ev2.instances.first.implementation.persisted?
-    assert ev2.instances.first.implementation.id == ev.instances.first.implementation.id
+    assert  ev2.instances.first.implementation.id ==
+            ev.instances.first.implementation.id
   end
 
   test 'can generate new environment with same initial version' do
     e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
+    ev = e.versions.create  name: '1.0',
+                            env_type: EnvType.find_or_create_by(name: 'Test')
     ev.reload
     assert ev.persisted?
     dl = DeployLog.create env_version: ev
     a = App.create name: 'TestApp'
     av = a.versions.create name: '1.0'
-    ai = Instance.create version: av, env_version: ev, implementation: Implementation.create(env_version: ev)
+    ai = Instance.create  version: av,
+                          env_version: ev,
+                          implementation: Implementation.create(env_version: ev)
     assert ai.persisted?
     d = Db.create name: 'TestDb'
     dv = d.versions.create name: '1.0'
-    di = Instance.create version: dv, env_version: ev, implementation: Implementation.create(env_version: ev)
+    di = Instance.create  version: dv,
+                          env_version: ev,
+                          implementation: Implementation.create(env_version: ev)
     assert di.persisted?
-    p1 = Property.create name: 'AppProperty', content: '42', overridable: false, owner: ai
-    p2 = Property.create name: 'DbProperty', content: '42', overridable: false, owner: di
-    p3 = Property.create name: 'EnvProperty', content: '42', overridable: false, owner: ev
+    p1 = Property.create  name: 'AppProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: ai
+    p2 = Property.create  name: 'DbProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: di
+    p3 = Property.create  name: 'EnvProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: ev
     assert p1.persisted?
     assert p2.persisted?
     assert p3.persisted?
@@ -81,20 +111,26 @@ class EnvVersionTest < ActiveSupport::TestCase
     assert ev.instances.first.version == ev2.instances.first.version
     assert ev.instances.first.version == ev2.instances.first.version
     assert ev2.properties.first.content == ev.properties.first.content
-    assert ev.instances.first.properties.first.content == ev2.instances.first.properties.first.content
-    assert ev.instances.first.properties.first.content== ev2.instances.first.properties.first.content
-    assert_not ev.instances.first.implementation == ev2.instances.first.implementation
+    assert  ev.instances.first.properties.first.content ==
+            ev2.instances.first.properties.first.content
+    assert  ev.instances.first.properties.first.content ==
+            ev2.instances.first.properties.first.content
+    assert_not  ev.instances.first.implementation ==
+                ev2.instances.first.implementation
     puts ev.tree
     puts ev2.tree
   end
 
   test 'dependency_handler' do
     e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create name: '1.0', env_type: EnvType.find_or_create_by(name: 'Test')
+    ev = e.versions.create  name: '1.0',
+                            env_type: EnvType.find_or_create_by(name: 'Test')
     dl = DeployLog.create env_version: ev
     a = App.create name: 'TestApp'
     av = a.versions.create name: '1.0'
-    ai = Instance.create version: av, env_version: ev, implementation: Implementation.create(env_version: ev)
+    ai = Instance.create  version: av,
+                          env_version: ev,
+                          implementation: Implementation.create(env_version: ev)
     d = Db.create name: 'TestDb'
     dv = d.versions.create name: '1.0'
     dv2 = d.versions.create name: '1.1'
@@ -104,8 +140,13 @@ class EnvVersionTest < ActiveSupport::TestCase
     assert follow.persisted?
     lead = Trigger.create! name: 'bring along', follow: false, lead: true
     assert lead.persisted?
-    mutual = Trigger.create! name: 'go along with and bring along', follow: true, lead: true
-    ad = Dependency.create! name: 'Database', depender: av, sequence: ds, trigger: follow
+    mutual = Trigger.create!  name: 'go along with and bring along',
+                              follow: true,
+                              lead: true
+    ad = Dependency.create! name: 'Database',
+                            depender: av,
+                            sequence: ds,
+                            trigger: follow
     assert ad.persisted?
     assert ad.depender == av
     av.reload
@@ -113,12 +154,28 @@ class EnvVersionTest < ActiveSupport::TestCase
     dm = DependeeMask.create dependency: ad, dependee: d, version_regex: ''
     ai.reload
     assert ai.dependencies.any?
-    di = Instance.create version: dv, env_version: ev, implementation: Implementation.create(env_version: ev)
-    di2 = Instance.create version: dv2, env_version: ev, implementation: Implementation.create(env_version: ev)
-    p1 = Property.create name: 'AppProperty', content: '41', overridable: false, owner: ai
-    p2 = Property.create name: 'DbProperty', content: '42', overridable: false, owner: di
-    p2a = Property.create name: 'DbProperty', content: '44', overridable: false, owner: di2
-    p3 = Property.create name: 'EnvProperty', content: '43', overridable: false, owner: ev
+    di = Instance.create  version: dv,
+                          env_version: ev, i
+                          mplementation: Implementation.create(env_version: ev)
+    di2 = Instance.create version: dv2,
+                          env_version: ev,
+                          implementation: Implementation.create(env_version: ev)
+    p1 = Property.create  name: 'AppProperty',
+                          content: '41',
+                          overridable: false,
+                          owner: ai
+    p2 = Property.create  name: 'DbProperty',
+                          content: '42',
+                          overridable: false,
+                          owner: di
+    p2a = Property.create name: 'DbProperty',
+                          content: '44',
+                          overridable: false,
+                          owner: di2
+    p3 = Property.create  name: 'EnvProperty',
+                          content: '43',
+                          overridable: false,
+                          owner: ev
     dp = DeployPlan.create env_version: ev
     dpi1 = DeployPlanItem.create deploy_plan: dp, instance: di
     assert ai.appproperty == '41'
@@ -126,7 +183,10 @@ class EnvVersionTest < ActiveSupport::TestCase
     assert ai.dependees(ai.dependencies.first).any?
     assert ai.dependees(ai.dependencies.first).include? di
     assert_not ai.database == di
-    ads = Selection.create! implementation: ai.implementation, dependency: ai.dependencies.first, env_version: ev, selected: ai.dependees(ai.dependencies.first).first
+    ads = Selection.create! implementation: ai.implementation,
+                            dependency: ai.dependencies.first,
+                            env_version: ev,
+                            selected: ai.dependees(ai.dependencies.first).first
     assert ai.database == di
     assert ai.database.dbproperty == '42'
     assert a.to_s == a.name

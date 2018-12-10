@@ -1,11 +1,15 @@
-# Mask describing candidates for fulfilling a dependency
+# Mask describing candidates for meeting a dependency
 class DependeeMask < ApplicationRecord
   # variant_not
   # version_regex
 
   belongs_to :dependency, inverse_of: :dependee_masks
-  belongs_to :variant, optional:true, inverse_of: :dependee_masks
+  # belongs_to :variant, optional:true, inverse_of: :dependee_masks
   belongs_to :dependee, class_name: 'Deployable', foreign_key: :dependee_id, inverse_of: :dependee_masks
+  has_many :variant_requirements, -> { where(not: false) }, inverse_of: :dependee_mask
+  has_many :variants, class_name: 'Variant', through: :variant_requirements
+  has_many :variant_prohibitions, ->{ where(not: true) }, class_name: 'VariantRequirement', inverse_of: :dependee_mask
+  has_many :non_variants, class_name: 'Variant', through: :variant_prohibitions, source: :variant
 
   def gt(v_string) # hvad med gte...
     v_arr = v_string.split('.')
@@ -74,5 +78,9 @@ class DependeeMask < ApplicationRecord
 
   def le(v_string)
     lt(v_string) + '|' + eq(v_string)
+  end
+
+  def variant
+
   end
 end
