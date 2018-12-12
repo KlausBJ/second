@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181208175212) do
+ActiveRecord::Schema.define(version: 20181210192402) do
 
   create_table "credential_groups", force: :cascade do |t|
     t.string "name"
@@ -85,16 +85,11 @@ ActiveRecord::Schema.define(version: 20181208175212) do
   create_table "deploy_plan_items", force: :cascade do |t|
     t.bigint "deploy_plan_id"
     t.integer "order"
-    t.string "after_item_type"
     t.bigint "after_item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "entity_instance_type"
-    t.bigint "entity_instance_id"
     t.bigint "instance_id"
-    t.index ["after_item_type", "after_item_id"], name: "index_deploy_plan_items_on_after_item_type_and_after_item_id"
     t.index ["deploy_plan_id"], name: "index_deploy_plan_items_on_deploy_plan_id"
-    t.index ["entity_instance_type", "entity_instance_id"], name: "index_deploy_plan_items_on_entity_instance_type_and_entity_instance_id"
   end
 
   create_table "deploy_plans", force: :cascade do |t|
@@ -181,9 +176,11 @@ ActiveRecord::Schema.define(version: 20181208175212) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "implementation_id"
+    t.bigint "server_id"
     t.index ["env_version_id"], name: "index_instances_on_env_version_id"
     t.index ["implementation_id"], name: "index_instances_on_implementation_id"
     t.index ["ru_instance_id"], name: "index_instances_on_ru_instance_id"
+    t.index ["server_id"], name: "index_instances_on_server_id"
     t.index ["version_id"], name: "index_instances_on_version_id"
   end
 
@@ -282,6 +279,15 @@ ActiveRecord::Schema.define(version: 20181208175212) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "servers", force: :cascade do |t|
+    t.string "name"
+    t.bigint "domain_id"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["domain_id"], name: "index_servers_on_domain_id"
+  end
+
   create_table "shares", force: :cascade do |t|
     t.string "name"
     t.string "path"
@@ -365,6 +371,7 @@ ActiveRecord::Schema.define(version: 20181208175212) do
   add_foreign_key "deploy_logs", "env_versions"
   add_foreign_key "deploy_plan_items", "deploy_plans"
   add_foreign_key "deploy_plan_items", "instances"
+  add_foreign_key "deploy_plan_items", "instances", column: "after_item_id"
   add_foreign_key "deploy_plans", "env_versions"
   add_foreign_key "env_versions", "env_types"
   add_foreign_key "env_versions", "environments"
@@ -376,6 +383,7 @@ ActiveRecord::Schema.define(version: 20181208175212) do
   add_foreign_key "instances", "env_versions"
   add_foreign_key "instances", "implementations"
   add_foreign_key "instances", "ru_instances"
+  add_foreign_key "instances", "servers"
   add_foreign_key "instances", "versions"
   add_foreign_key "logins", "credential_versions"
   add_foreign_key "logins", "instances"
@@ -392,6 +400,7 @@ ActiveRecord::Schema.define(version: 20181208175212) do
   add_foreign_key "selections", "env_versions"
   add_foreign_key "selections", "implementations"
   add_foreign_key "selections", "instances", column: "selected_id"
+  add_foreign_key "servers", "domains"
   add_foreign_key "shares", "credential_versions"
   add_foreign_key "templates", "files"
   add_foreign_key "templates", "versions"

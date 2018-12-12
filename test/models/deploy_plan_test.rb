@@ -3,11 +3,12 @@ require 'test_helper'
 class DeployPlanTest < ActiveSupport::TestCase
   test "relates to env_version" do
     e = Environment.create! name: 'RuInstanceFullRelationTest'
-    ev = e.versions.create name: '1.0'
+    ev = e.versions.create! name: '1.0',
+                            env_type: EnvType.find_or_create_by!(name: 'Test')
     app = App.create!(name: 'TestApp')
-    av = app.versions.create name: '1.0'
+    av = app.versions.create! name: '1.0'
     db = Db.create!(name: 'TestDb')
-    dv = db.versions.create name: '1.0'
+    dv = db.versions.create! name: '1.0'
     ai = Instance.new env_version: ev, version: av
     di = Instance.new env_version: ev, version: dv
     dp = DeployPlan.new env_version: ev

@@ -2,47 +2,55 @@ require 'test_helper'
 
 class EnvVersionTest < ActiveSupport::TestCase
   test 'can have deploylogs' do
-    e = Environment.create name: 'TestDeployLogEnv'
-    ev = e.versions.create  name: '1.0',
-                            env_type: EnvType.find_or_create_by(name: 'Test')
-    dl = DeployLog.create env_version: ev
+    e = Environment.create! name: 'TestDeployLogEnv'
+    ev = e.versions.create!  name: '1.0',
+                            env_type: EnvType.find_or_create_by!(name: 'Test')
+    dl = DeployLog.create! env_version: ev
     assert ev.deploy_logs.any?
   end
 
   test 'can generate new version with same content' do
-    e = Environment.create name: 'TestEnvNewVersion'
+    e = Environment.create! name: 'TestEnvNewVersion'
     assert e.versions.none?
-    ev = e.versions.create  name: '1.0',
-                            env_type: EnvType.find_or_create_by(name: 'Test')
+    ev = e.versions.create! name: '1.0',
+                            env_type: EnvType.find_or_create_by!(name: 'Test')
+    dom = Domain.find_or_create_by!(
+            name: 'PenSam',
+            netbios: 'PENSAM.DOM',
+            dns: 'pensam.dk')
     assert e.versions.any?
-    dl = DeployLog.create env_version: ev
+    dl = DeployLog.create! env_version: ev
     assert dl.persisted?
-    a = App.create name: 'TestApp'
+    a = App.create! name: 'TestApp'
     assert a.persisted?
-    av = a.versions.create name: '1.0'
+    av = a.versions.create! name: '1.0'
     assert av.persisted?
-    i1 = Implementation.create env_version: ev, changed_in: ev
+    i1 = Implementation.create! env_version: ev, changed_in: ev
     assert i1.persisted?
-    ai = Instance.create version: av, env_version: ev, implementation: i1
+    ai = Instance.create! version: av,
+                          env_version: ev,
+                          implementation: i1,
+                          server: Server.create!(name: 'VM40', domain: dom)
     ai.reload
     assert ev.instances.any?
-    d = Db.create name: 'TestDb'
-    dv = d.versions.create name: '1.0'
-    i2 = Implementation.create env_version: ev, changed_in: ev
+    d = Db.create! name: 'TestDb'
+    dv = d.versions.create! name: '1.0'
+    i2 = Implementation.create! env_version: ev, changed_in: ev
     assert i2.persisted?
-    di = Instance.create  version: dv,
+    di = Instance.create! version: dv,
                           env_version: ev,
-                          implementation: i2
+                          implementation: i2,
+                          server: Server.create!(name: 'VM40', domain: dom)
     assert ev.instances.any?
-    p1 = Property.create  name: 'AppProperty',
+    p1 = Property.create! name: 'AppProperty',
                           content: '42',
                           overridable: false,
                           owner: ai
-    p2 = Property.create  name: 'DbProperty',
+    p2 = Property.create! name: 'DbProperty',
                           content: '42',
                           overridable: false,
                           owner: di
-    p3 = Property.create  name: 'EnvProperty',
+    p3 = Property.create! name: 'EnvProperty',
                           content: '42',
                           overridable: false,
                           owner: ev
@@ -68,33 +76,42 @@ class EnvVersionTest < ActiveSupport::TestCase
   end
 
   test 'can generate new environment with same initial version' do
-    e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create  name: '1.0',
-                            env_type: EnvType.find_or_create_by(name: 'Test')
+    e = Environment.create! name: 'TestEnvNewVersion'
+    ev = e.versions.create!  name: '1.0',
+                            env_type: EnvType.find_or_create_by!(name: 'Test')
+    dom = Domain.find_or_create_by!(
+            name: 'PenSam',
+            netbios: 'PENSAM.DOM',
+            dns: 'pensam.dk')
     ev.reload
     assert ev.persisted?
-    dl = DeployLog.create env_version: ev
-    a = App.create name: 'TestApp'
-    av = a.versions.create name: '1.0'
-    ai = Instance.create  version: av,
-                          env_version: ev,
-                          implementation: Implementation.create(env_version: ev)
+    dl = DeployLog.create! env_version: ev
+    a = App.create! name: 'TestApp'
+    av = a.versions.create! name: '1.0'
+    ai = Instance.create!(
+          version: av,
+          env_version: ev,
+          implementation: Implementation.create!(env_version: ev),
+    server: Server.find_or_create_by!(name: 'VM40', domain: dom))
     assert ai.persisted?
-    d = Db.create name: 'TestDb'
-    dv = d.versions.create name: '1.0'
-    di = Instance.create  version: dv,
-                          env_version: ev,
-                          implementation: Implementation.create(env_version: ev)
+    assert ai.server.persisted?
+    d = Db.create! name: 'TestDb'
+    dv = d.versions.create! name: '1.0'
+    di = Instance.create!(
+          version: dv,
+          env_version: ev,
+          implementation: Implementation.create!(env_version: ev),
+    server: Server.find_or_create_by!(name: 'VM40', domain: dom))
     assert di.persisted?
-    p1 = Property.create  name: 'AppProperty',
+    p1 = Property.create! name: 'AppProperty',
                           content: '42',
                           overridable: false,
                           owner: ai
-    p2 = Property.create  name: 'DbProperty',
+    p2 = Property.create! name: 'DbProperty',
                           content: '42',
                           overridable: false,
                           owner: di
-    p3 = Property.create  name: 'EnvProperty',
+    p3 = Property.create! name: 'EnvProperty',
                           content: '42',
                           overridable: false,
                           owner: ev
@@ -117,24 +134,28 @@ class EnvVersionTest < ActiveSupport::TestCase
             ev2.instances.first.properties.first.content
     assert_not  ev.instances.first.implementation ==
                 ev2.instances.first.implementation
-    puts ev.tree
-    puts ev2.tree
   end
 
   test 'dependency_handler' do
-    e = Environment.create name: 'TestEnvNewVersion'
-    ev = e.versions.create  name: '1.0',
-                            env_type: EnvType.find_or_create_by(name: 'Test')
-    dl = DeployLog.create env_version: ev
-    a = App.create name: 'TestApp'
-    av = a.versions.create name: '1.0'
-    ai = Instance.create  version: av,
-                          env_version: ev,
-                          implementation: Implementation.create(env_version: ev)
-    d = Db.create name: 'TestDb'
-    dv = d.versions.create name: '1.0'
-    dv2 = d.versions.create name: '1.1'
-    ds = Sequence.create name: 'Deploy after', after: true
+    e = Environment.create! name: 'TestEnvNewVersion'
+    ev = e.versions.create! name: '1.0',
+                            env_type: EnvType.find_or_create_by!(name: 'Test')
+    dom = Domain.find_or_create_by!(
+            name: 'PenSam',
+            netbios: 'PENSAM.DOM',
+            dns: 'pensam.dk')
+    dl = DeployLog.create! env_version: ev
+    a = App.create! name: 'TestApp'
+    av = a.versions.create! name: '1.0'
+    ai = Instance.create!(
+            version: av,
+            env_version: ev,
+            implementation: Implementation.create!(env_version: ev),
+            server: Server.find_or_create_by!(name: 'VM40', domain: dom))
+    d = Db.create! name: 'TestDb'
+    dv = d.versions.create! name: '1.0'
+    dv2 = d.versions.create! name: '1.1'
+    ds = Sequence.create! name: 'Deploy after', after: true
     assert ds.persisted?
     follow = Trigger.create! name: 'go along with', follow: true, lead: false
     assert follow.persisted?
@@ -151,33 +172,37 @@ class EnvVersionTest < ActiveSupport::TestCase
     assert ad.depender == av
     av.reload
     assert av.dependencies.any?
-    dm = DependeeMask.create dependency: ad, dependee: d, version_regex: ''
+    dm = DependeeMask.create! dependency: ad, dependee: d, version_regex: ''
     ai.reload
     assert ai.dependencies.any?
-    di = Instance.create  version: dv,
-                          env_version: ev, i
-                          mplementation: Implementation.create(env_version: ev)
-    di2 = Instance.create version: dv2,
-                          env_version: ev,
-                          implementation: Implementation.create(env_version: ev)
-    p1 = Property.create  name: 'AppProperty',
+    di = Instance.create!(
+          version: dv,
+          env_version: ev,
+          implementation: Implementation.create!(env_version: ev),
+          server: Server.find_or_create_by!(name: 'VM40', domain: dom))
+    di2 = Instance.create!(
+            version: dv2,
+            env_version: ev,
+            implementation: Implementation.create!(env_version: ev),
+            server: Server.create!(name: 'VM40', domain: dom))
+    p1 = Property.create! name: 'AppProperty',
                           content: '41',
                           overridable: false,
                           owner: ai
-    p2 = Property.create  name: 'DbProperty',
+    p2 = Property.create! name: 'DbProperty',
                           content: '42',
                           overridable: false,
                           owner: di
-    p2a = Property.create name: 'DbProperty',
-                          content: '44',
-                          overridable: false,
-                          owner: di2
-    p3 = Property.create  name: 'EnvProperty',
+    p2a = Property.create!  name: 'DbProperty',
+                            content: '44',
+                            overridable: false,
+                            owner: di2
+    p3 = Property.create! name: 'EnvProperty',
                           content: '43',
                           overridable: false,
                           owner: ev
-    dp = DeployPlan.create env_version: ev
-    dpi1 = DeployPlanItem.create deploy_plan: dp, instance: di
+    dp = DeployPlan.create! env_version: ev
+    dpi1 = DeployPlanItem.create! deploy_plan: dp, instance: di
     assert ai.appproperty == '41'
     assert ai.env.envproperty == '43'
     assert ai.dependees(ai.dependencies.first).any?

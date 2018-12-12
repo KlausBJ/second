@@ -9,6 +9,7 @@ class EnvVersion < ApplicationRecord
   belongs_to :environment, inverse_of: :env_versions
   has_many :properties, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :instances, dependent: :destroy, inverse_of: :env_version
+  has_many :servers, -> { distinct }, through: :instances
   has_many :deploy_plans, dependent: :destroy, inverse_of: :env_version
   has_many :ru_instances, dependent: :destroy, inverse_of: :env_version
   has_many :deploy_logs, inverse_of: :env_version
@@ -21,7 +22,6 @@ class EnvVersion < ApplicationRecord
   has_many :credential_versions,  through: :credentials
 
   amoeba do
-    puts 'amoeba: visited EnvVersion'
     include_association :properties # dead end
     include_association :instances
     include_association :deploy_plans # hmm, maybe...
@@ -39,14 +39,14 @@ class EnvVersion < ApplicationRecord
   def clone(name)
     new_ver = amoeba_dup
     new_ver.environment = Environment.create name: name
-    new_ver.save!
+    new_ver.save
     new_ver.instances.each do |inst|
-      puts 'inst...'
-      inst.implementation = Implementation.create env_version: new_ver, changed_in: new_ver
+      inst.server.name = 'Copy of ' + inst.server.name
+      inst.implementation = Implementation.create(
+                                env_version: new_ver,
+                                changed_in: new_ver)
       inst.save!
-      puts "inst.implementation.id: #{inst.implementation.id}"
     end
-    puts "instances: #{new_ver.instances.count}"
     new_ver.reload
   end
 

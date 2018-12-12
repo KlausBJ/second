@@ -3,8 +3,8 @@ require 'test_helper'
 class VariantTest < ActiveSupport::TestCase
   test "variant relates to app or db" do
     a = App.create! name: 'VariantTestApp'
-    av = a.versions.create name: '1.0'
-    v = Variant.create name: 'Test', deployable: a
+    av = a.versions.create! name: '1.0'
+    v = Variant.create! name: 'Test', deployable: a
     aim = VariantVersion.create! variant: v, version: av
     ai = aim.variant
     assert aim.persisted?
@@ -19,8 +19,8 @@ class VariantTest < ActiveSupport::TestCase
     assert av.variant_versions.none?
 
     d = Db.create! name: 'VariantTestDb'
-    dv = d.versions.create name: '1.0'
-    v = Variant.create name: 'Test', deployable: d
+    dv = d.versions.create! name: '1.0'
+    v = Variant.create! name: 'Test', deployable: d
     dim = VariantVersion.create! variant: v, version: dv
     di = dim.variant
     assert dim.persisted?

@@ -3,27 +3,27 @@ require 'test_helper'
 class DependencyTest < ActiveSupport::TestCase
   test "links depender to dependee_masks etc" do
     a = App.create! name: 'TestDependencyApp'
-    av = a.versions.create name: '1.0'
+    av = a.versions.create! name: '1.0'
     ad = Dependency.new depender: av
-    assert ad.save
+    assert ad.save!
 
-    d = Db.create name: 'TestDependencyDb'
-    dv = d.versions.create name: '1.0'
+    d = Db.create! name: 'TestDependencyDb'
+    dv = d.versions.create! name: '1.0'
     dd = Dependency.new depender: dv
-    assert dd.save
+    assert dd.save!
 
     adm = DependeeMask.new dependency: ad, dependee: d, version_regex: '[234]\.'
-    assert adm.save
+    assert adm.save!
     ddm = DependeeMask.new dependency: dd, dependee: a, version_regex: '3\.'
-    assert ddm.save
+    assert ddm.save!
   end
 
   test 'optional use of sequence and trigger' do
     a = App.create! name: 'TestDependencyApp'
-    av = a.versions.create name: '1.0'
+    av = a.versions.create! name: '1.0'
     ad = Dependency.create! depender: av
     d = Db.create! name: 'TestDependencyDb'
-    dv = d.versions.create name: '1.0'
+    dv = d.versions.create! name: '1.0'
     dd = Dependency.create! depender: dv
     adm = DependeeMask.create! dependency: ad, dependee: d, version_regex: '[234]\.'
     ddm = DependeeMask.create! dependency: dd, dependee: a, version_regex: '3\.'
